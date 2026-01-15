@@ -33,6 +33,8 @@ const getAllProducts = async (req, res) => {
       '=': '$eq',
     }
 
+    console.log(numericFilters);
+
     const regExp = /\b(<|>|>=|=|<|<=)\b/g;
     let filters = numericFilters.replace(regExp, (match) => `-${operatorMap[match]}-`);
 
@@ -40,6 +42,8 @@ const getAllProducts = async (req, res) => {
     filters = filters.split(',').forEach((item) => {
       const [field, operator, value] = item.split('-');
       if (options.includes(field)) {
+        // Square brackets [] mean: “use the VALUE of the variable, not the variable name itself.”
+        // This is called computed property names in JavaScript.
         queryObject[field] = { [operator]: Number(value) }
       }
     });
